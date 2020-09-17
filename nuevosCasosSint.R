@@ -13,7 +13,7 @@ setwd("~/Documents/OnCampusJob/nuevos-casos-covid-19")
 
 ## Cambiar nombre de archivo y correr
 ######################################################
-archivo <- "200824COVID19MEXICO.csv"
+archivo <- "200916COVID19MEXICO.csv"
 #######################################################
 
 month <- substr(archivo, 3,4)
@@ -86,7 +86,7 @@ df2$entidad <- as.integer(df2$entidad)
 
 df2$fecha <- as.Date(df2$fecha, format="%Y-%m-%d")
 df2[is.na(df2)] <- 0
-df3 <- df2[df2$fecha >= "2020-03-15" & df2$fecha <= "2020-08-09", ]
+df3 <- df2[df2$fecha >= "2020-03-15" & df2$fecha <= "2020-09-02", ]
 df3 <- df3[order(df3$entidad, df3$fecha),]
 
 df3$fecha <- format(df3$fecha, "%d/%m/%Y")
@@ -103,8 +103,8 @@ nac$mv <- 0
 
 edos <- edos[order(edos$entidad, edos$fecha),]
 
-nac <- nac[nac$fecha >= "2020-03-15" & nac$fecha <= "2020-08-09", ]
-edos <- edos[edos$fecha >= "2020-03-15" & edos$fecha <= "2020-08-09", ]
+nac <- nac[nac$fecha >= "2020-03-15" & nac$fecha <= "2020-09-02", ]
+edos <- edos[edos$fecha >= "2020-03-15" & edos$fecha <= "2020-09-02", ]
 
 row.names(nac) <- 1:nrow(nac)
 row.names(edos) <- 1:nrow(edos)
@@ -123,8 +123,8 @@ head(nac)
 plot1 <- ggplot(nac, aes(x=fecha, y=casos)) 
 
 plot1 + geom_bar(stat = "identity", position="identity") +
-    ggtitle("N?mero de casos Covid-19 por fecha de inicio de s?ntomas (Nacional)") +
-    xlab("Fecha de inicio de s?ntomas") + ylab("N?mero de casos") +
+    ggtitle("Número de casos Covid-19 por fecha de inicio de síntomas (Nacional)") +
+    xlab("Fecha de inicio de síntomas") + ylab("Número de casos") +
     scale_x_date(labels=date_format ("%b %d"), breaks=breaks_width("2 weeks")) +
     theme(plot.title = element_text(lineheight=.8, face="bold", size = 20)) +
     theme(text = element_text(size=18)) + stat_smooth(colour="green") + 
@@ -135,11 +135,11 @@ df3$fecha <- as.Date(df3$fecha, format="%d/%m/%Y")
 
 
 ## Nivel de positividad.
-plot2 <- ggplot(df3[df3$entidad==19,], aes(x=fecha, y=casos))
+plot2 <- ggplot(df3[df3$entidad==25,], aes(x=fecha, y=casos))
 
 plot2 + geom_bar(stat = "identity", position="identity") +
-  ggtitle("N?mero de casos Covid-19 por fecha de inicio de s?ntomas (Nuevo Le?n)") +
-  xlab("Fecha de inicio de s?ntomas") + ylab("N?mero de casos") +
+  ggtitle("Número de casos Covid-19 por fecha de inicio de síntomas (Sinaloa)") +
+  xlab("Fecha de inicio de síntomas") + ylab("Número de casos") +
   scale_x_date(labels=date_format ("%b %d"), breaks=breaks_width("2 weeks")) +
   theme(plot.title = element_text(lineheight=.8, face="bold", size = 20)) +
   theme(text = element_text(size=18)) + stat_smooth(colour="green") + 
@@ -149,11 +149,11 @@ plot2 + geom_bar(stat = "identity", position="identity") +
 
 
 
-plot3 <- ggplot(edos2[edos2$entidad==11,], aes(x=fecha, y=casos))
+plot3 <- ggplot(edos2[edos2$entidad==31,], aes(x=fecha, y=casos))
 
 plot3 + geom_bar(stat = "identity", position="identity") +
-  ggtitle("N?mero de casos Covid-19 por fecha de inicio de s?ntomas (Guanajuato)") +
-  xlab("Fecha de inicio de s?ntomas") + ylab("N?mero de casos") +
+  ggtitle("Número de casos Covid-19 por fecha de inicio de síntomas (Yucatán)") +
+  xlab("Fecha de inicio de síntomas") + ylab("Número de casos") +
   scale_x_date(labels=date_format ("%b %d"), breaks=breaks_width("2 weeks")) +
   theme(plot.title = element_text(lineheight=.8, face="bold", size = 20)) +
   theme(text = element_text(size=18)) + stat_smooth(colour="green") + 
@@ -161,11 +161,11 @@ plot3 + geom_bar(stat = "identity", position="identity") +
   #geom_text(aes(x=fecha[80], label="\nApertura", y=250), colour="red", angle=90, size=6)
 
 
-plot3 <- ggplot(edos2[edos2$entidad==15,], aes(x=fecha, y=casos))
+plot3 <- ggplot(edos2[edos2$entidad==32,], aes(x=fecha, y=casos))
 
 plot3 + geom_bar(stat = "identity", position="identity") +
-  ggtitle("N?mero de casos Covid-19 por fecha de inicio de s?ntomas (Estado de M?xico)") +
-  xlab("Fecha de inicio de s?ntomas") + ylab("N?mero de casos") +
+  ggtitle("Número de casos Covid-19 por fecha de inicio de síntomas (Zacatecas)") +
+  xlab("Fecha de inicio de síntomas") + ylab("Número de casos") +
   scale_x_date(labels=date_format ("%b %d"), breaks=breaks_width("2 weeks")) +
   theme(plot.title = element_text(lineheight=.8, face="bold", size = 20)) +
   theme(text = element_text(size=18)) + stat_smooth(colour="green")  +
