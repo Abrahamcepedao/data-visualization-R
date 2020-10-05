@@ -7,13 +7,13 @@ library(stringr)
 library(sqldf)
 library(ggplot2)
 library(scales)
-
+library(gsubfn)
 setwd("~/Documents/OnCampusJob/nuevos-casos-covid-19")
 
 
 ## Cambiar nombre de archivo y correr
 ######################################################
-archivo <- "200916COVID19MEXICO.csv"
+archivo <- "201001COVID19MEXICO.csv"
 #######################################################
 
 month <- substr(archivo, 3,4)
@@ -86,7 +86,7 @@ df2$entidad <- as.integer(df2$entidad)
 
 df2$fecha <- as.Date(df2$fecha, format="%Y-%m-%d")
 df2[is.na(df2)] <- 0
-df3 <- df2[df2$fecha >= "2020-03-15" & df2$fecha <= "2020-09-02", ]
+df3 <- df2[df2$fecha >= "2020-03-15" & df2$fecha <= "2020-09-16", ]
 df3 <- df3[order(df3$entidad, df3$fecha),]
 
 df3$fecha <- format(df3$fecha, "%d/%m/%Y")
@@ -103,8 +103,8 @@ nac$mv <- 0
 
 edos <- edos[order(edos$entidad, edos$fecha),]
 
-nac <- nac[nac$fecha >= "2020-03-15" & nac$fecha <= "2020-09-02", ]
-edos <- edos[edos$fecha >= "2020-03-15" & edos$fecha <= "2020-09-02", ]
+nac <- nac[nac$fecha >= "2020-03-15" & nac$fecha <= "2020-09-16", ]
+edos <- edos[edos$fecha >= "2020-03-15" & edos$fecha <= "2020-09-16", ]
 
 row.names(nac) <- 1:nrow(nac)
 row.names(edos) <- 1:nrow(edos)
@@ -149,10 +149,10 @@ plot2 + geom_bar(stat = "identity", position="identity") +
 
 
 
-plot3 <- ggplot(edos2[edos2$entidad==31,], aes(x=fecha, y=casos))
+plot3 <- ggplot(edos2[edos2$entidad=16,], aes(x=fecha, y=casos))
 
 plot3 + geom_bar(stat = "identity", position="identity") +
-  ggtitle("Número de casos Covid-19 por fecha de inicio de síntomas (Yucatán)") +
+  ggtitle("Número de casos Covid-19 por fecha de inicio de síntomas (Michoacán)") +
   xlab("Fecha de inicio de síntomas") + ylab("Número de casos") +
   scale_x_date(labels=date_format ("%b %d"), breaks=breaks_width("2 weeks")) +
   theme(plot.title = element_text(lineheight=.8, face="bold", size = 20)) +
@@ -161,10 +161,10 @@ plot3 + geom_bar(stat = "identity", position="identity") +
   #geom_text(aes(x=fecha[80], label="\nApertura", y=250), colour="red", angle=90, size=6)
 
 
-plot3 <- ggplot(edos2[edos2$entidad==32,], aes(x=fecha, y=casos))
+plot3 <- ggplot(edos2[edos2$entidad==17,], aes(x=fecha, y=casos))
 
 plot3 + geom_bar(stat = "identity", position="identity") +
-  ggtitle("Número de casos Covid-19 por fecha de inicio de síntomas (Zacatecas)") +
+  ggtitle("Número de casos Covid-19 por fecha de inicio de síntomas (Morelos)") +
   xlab("Fecha de inicio de síntomas") + ylab("Número de casos") +
   scale_x_date(labels=date_format ("%b %d"), breaks=breaks_width("2 weeks")) +
   theme(plot.title = element_text(lineheight=.8, face="bold", size = 20)) +
@@ -172,6 +172,21 @@ plot3 + geom_bar(stat = "identity", position="identity") +
   geom_vline(xintercept=as.numeric(nac$fecha[79]), col="red", size=2) 
   #geom_text(aes(x=fecha[80], label="\nApertura", y=700), colour="red", angle=90, size=6)
 
+#query  de estados 
+dataEstados <- data.frame(
+  "Entidad federativa"  = c("Aguascalientes", "Baja California", "Baja California Sur", "Campeche", "Coahuila", "Colima", "Chiapas", "Chihuahua", "CDMX", "Durango", "Guanuajuato", "Guerrero", "Hidalgo", "Jalisco", "EDOMEX", "Michoacán", "Morelos", "Nayarit", "Nuevo León", "Oaxaca", "Puebla", "Querétaro", "Quintana Roo", "San Luis Potosí", "Sinaloa", "Sonora", "Tabasco", "Tamaulipas", "Tlaxcala", "Veracruz", "Yucatán", "Zacatecas"),
+  "Número de fallecidos" =  data.frame(table(d$ENTIDAD_RES2[d$FECHA_DEF != "9999-99-99"]))$Freq,
+  "Número de confirmados positivos" =  data.frame(table(d$ENTIDAD_RES2[d$RESULTADO == 1]))$Freq,
+  "Número de pruebas totales" =  data.frame(table(d$ENTIDAD_RES2))$Freq
+)
+
+#query de hospitales
+dataHospitales <- data.frame(
+  "Hospitales"  = c("Cruz Roja", "DIF", "Estatal", "IMSS", "IMSS-Bienestar", "ISSSTE", "Municipal", "PEMEX", "Privada", "SEDENNA", "SEMAR", "SSA", "Universitario", "No especificado"),
+  "Fallecidos" =  c(data.frame(table(d$SECTOR[d$FECHA_DEF != "9999-99-99"]))$Freq,0),
+  "Positivos" =  c(data.frame(table(d$SECTOR[d$RESULTADO == 1]))$Freq,0),
+  "Pruebas" =  c(data.frame(table(d$SECTOR))$Freq)
+)
 
 ##############################################################################################
 ### NYC
